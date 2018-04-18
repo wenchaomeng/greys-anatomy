@@ -517,7 +517,9 @@ public class TObject implements TComponent {
 
                     final StringBuilder bufOfObject = new StringBuilder();
                     bufOfObject.append(format("@%s[", className));
-                    final Field[] fields = obj.getClass().getDeclaredFields();
+
+                    final List<Field> fields = new LinkedList<Field>();
+                    getAllFields(obj.getClass(), fields);
                     if (null != fields) {
                         for (Field field : fields) {
 
@@ -573,6 +575,18 @@ public class TObject implements TComponent {
 
         return tabBuf.toString();
 
+    }
+
+    public static void getAllFields(Class clazz, List<Field> fields) {
+
+        if(clazz == null){
+            return;
+        }
+
+        for(Field field : clazz.getDeclaredFields()){
+            fields.add(field);
+        }
+        getAllFields(clazz.getSuperclass(), fields);
     }
 
     /**
